@@ -8,7 +8,7 @@
         "modelPath": {
           "type": "string",
           "description": "The path to the folder containing the models",
-          "default": "./try",
+          "default": "./src/app/models",
           "x-prompt":"Enter path"
         }
     },

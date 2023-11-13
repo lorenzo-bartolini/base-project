@@ -6,11 +6,10 @@ import { <%= classify(name)%>ResolverService } from './<%= dasherize(name)%>-res
 import { <%= classify(name)%>Component } from './<%= dasherize(name)%>.component';
 
 const ROUTES: Route[] = [
-  { path: '', component: <%= classify(name)%>Component, children: [
     { path: '', component: <%= classify(name)%>ListComponent, pathMatch: 'full' },
     { path: 'new', component: <%= classify(name)%>DetailComponent, pathMatch: 'full' },
     { path: ':id', component: <%= classify(name)%>DetailComponent, resolve: { <%= camelize(name)%>: <%= classify(name)%>ResolverService  } },
-  ]}
+  
 ];
 
 @NgModule({

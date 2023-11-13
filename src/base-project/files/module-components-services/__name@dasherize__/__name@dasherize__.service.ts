@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseService } from '../base/base.service';
 import { environment } from '../environments/environment';
 import { <%= classify(name) %> } from '../models/<%= dasherize(name) %>';
-import { LibService } from './lib.service';
+import { LibService } from '../shared/lib.service';
 
 @Injectable({
   providedIn: 'root'

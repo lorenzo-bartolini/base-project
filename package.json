@@ -1,7 +1,7 @@
 {
-  "name": "base-project",
-  "version": "0.0.0",
-  "description": "A blank schematics",
+  "name": "base-project-schematics",
+  "version": "1.0.10",
+  "description": "A schematics to create Angular Modules, Lists and Detail components from a model folder",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*_spec.js",
@@ -24,5 +24,8 @@
     "@types/node": "^18.18.0",
     "jasmine": "^5.0.0",
     "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "@angular/material": "*"
   }
 }
