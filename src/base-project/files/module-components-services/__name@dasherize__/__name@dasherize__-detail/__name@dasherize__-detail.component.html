@@ -1,0 +1,8 @@
+<form [formGroup]="form">
+      <app-detail-page
+        [title]="isNew ? ('<%= classify(name) %>s.Detail.New.Title' | translate) : ('<%= classify(name) %>s.Detail.Title' | translate:profile)"
+        [subtitle]="isNew ? ('<%= classify(name) %>s.Detail.New.Subtitle' | translate) : ('<%= classify(name) %>s.Detail.Subtitle' | translate:profile)"
+        [saveDisabled]="form.invalid" routeBack="/<%= dasherize(name) %>" (save)="save()">
+        <%= form %>
+      </app-detail-page>
+</form>

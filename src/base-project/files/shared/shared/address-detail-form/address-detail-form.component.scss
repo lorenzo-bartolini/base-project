@@ -1,0 +1,35 @@
+.form-subject{
+  width: 70%;
+  margin-left : 15%
+}
+
+
+.green{
+  color:green;
+}
+
+.error{
+  color:red;
+}
+
+.warning{
+  color: orange
+}
+
+.addr-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.addr-item-short {
+  flex-grow: .5;
+}
+
+.addr-item-medium {
+  flex-grow: 2;
+}
+
+.addr-item-large {
+  flex-grow: 6;
+}

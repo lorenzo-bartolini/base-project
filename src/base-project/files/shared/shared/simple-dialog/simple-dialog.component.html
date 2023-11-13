@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content>
+  {{'LABEL.DELETE_MODULE' | translate }}
+</div>
+<div mat-dialog-actions style="display: flex; justify-content: flex-end;">
+
+  <button mat-button [mat-dialog-close]="'yes'" cdkFocusInitial >{{'LABEL.YES' | translate}}</button>
+  <button mat-button [mat-dialog-close]="'no'" >{{'LABEL.NO' | translate}}</button>
+</div>

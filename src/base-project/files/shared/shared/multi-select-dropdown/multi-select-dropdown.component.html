@@ -1,0 +1,76 @@
+<div fxLayout="column" fxFill  >
+  <mat-form-field appearance="outline" class="width-100">
+    <mat-chip-grid #chipList [disabled]="disableChipList">
+      <mat-chip-option
+        *ngFor="let item of currentValues"
+        [selectable]="true"
+        [removable]="true"
+        (removed)="remove(item)">
+
+      <div *ngIf="firstSelectionViewField === 'code'">
+        {{ 'LABEL.' + item[firstSelectionViewField] | translate }}
+      </div>
+      <div *ngIf="firstSelectionViewField === 'uiLabel'">
+        {{ 'LABEL.' + item[firstSelectionViewField] | translate }}
+      </div>
+      <div *ngIf="firstSelectionViewField === 'deviceName'">
+        {{ 'DISPATCHER.' + item.name | translate }}
+      </div>
+      <div *ngIf="firstSelectionViewField === 'compName'">
+        {{ 'REQUEST.' + item | translate}}
+      </div>
+      <div *ngIf="firstSelectionViewField !== '' && firstSelectionViewField !== 'uiLabel' && firstSelectionViewField !== 'code'">
+        {{item[firstSelectionViewField]}}
+      </div>
+      <div *ngIf="firstSelectionViewField === ''">
+        {{item}}
+      </div>
+
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip-option>
+    </mat-chip-grid>
+    <input #inputFofChip
+      hidden
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+
+    />
+  </mat-form-field>
+  <div [formGroup]="form" fxLayout="row" >
+
+    <app-select-search
+      [style]="style"
+      formControlName="main"
+      [label]="labelRequest !== undefined? labelRequest: firstSelectionLabel"
+      [items]="items"
+      [viewField]="firstSelectionViewField"
+      [noMatchLabel]="'LABEL.NoSearchResults' | translate"
+      fxFlex [noUsers]="noUsers"
+    ></app-select-search>
+
+    <mat-form-field *ngIf="showSecondSelection" fxFlex>
+      <mat-label>second</mat-label>
+      <mat-select formControlName="second">
+        <mat-option *ngFor="let item of secondSelectionList" [value]="item">
+          <div *ngIf="secondSelectionViewField === 'uiLabel'">
+            {{ 'LABEL.' + item[secondSelectionViewField] | translate }}
+          </div>
+          <div *ngIf="secondSelectionViewField !== ''">
+            {{item[secondSelectionViewField]}}
+          </div>
+          <div *ngIf="secondSelectionViewField !== ''">
+            {{item}}
+          </div>
+
+          <div *ngIf="secondSelectionViewField === 'code'">
+            {{ 'LABEL.' + item[secondSelectionViewField] | translate }}
+          </div>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-mini-fab color="primary" *ngIf="showSecondSelection" (click)="add()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+
+<mat-card class="mat-elevation-z0" [class.no-padding]="noPadding">
+  <div class="card-header">
+    <div class="title-subtitle-container">
+      <mat-card-title>{{title}}</mat-card-title>
+      <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
+    </div>
+    <div class="spacer"></div>
+    <div class="button-container">
+      <ng-container *ngIf="buttonsTemplate">
+        <ng-container *ngTemplateOutlet="buttonsTemplate"></ng-container>
+      </ng-container>
+    </div>
+  </div>
+
+  <mat-card-content>
+    <ng-content></ng-content>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <div class="action-buttons">
+      <button mat-stroked-button color="primary" [disabled]="saveDisabled" (click)="onSave($event)"
+        *ngIf="save.observers.length > 0">{{'General.Save' | translate}}</button>
+      <button mat-stroked-button color="warn" [disabled]="cancelDisabled" (click)="onCancel($event)"
+        *ngIf="cancel.observers.length > 0">{{'General.Cancel' | translate}}</button>
+      <button mat-stroked-button color="warn" [disabled]="deleteDisabled" (click)="onDelete($event)"
+        *ngIf="delete.observers.length > 0">{{'General.Delete' | translate}}</button>
+
+      <button mat-button type="button" color="accent" [routerLink]="routeBack"
+        *ngIf="routeBack">{{'General.BackToList' | translate}}</button>
+
+      <ng-container *ngIf="bottomButtonsTemplate">
+        <ng-container *ngTemplateOutlet="bottomButtonsTemplate"></ng-container>
+      </ng-container>
+    </div>
+  </mat-card-actions>
+</mat-card>

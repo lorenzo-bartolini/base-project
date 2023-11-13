@@ -1,0 +1,98 @@
+<!-- <baa-progress-spinner mode="indeterminate" [displayProgressSpinner]="loading"></baa-progress-spinner> -->
+
+<div id="dt-princ" class="initial">
+<!-- <div class=""> -->
+  <mat-table id="dt-child"
+    [dataSource]="dataSource"
+    class="mat-elevation-z0 table-container"
+    matSort
+    [matSortActive]="sortActive"
+    [matSortDirection]="sortDirection"
+    matSortDisableClear
+  >
+  <ng-container matColumnDef="actions" *ngIf="actions"  [sticky]="isActionsSticky" style="z-index: 999;">
+    <mat-header-cell *matHeaderCellDef [ngClass]="dynamicColWidth? 'column-data font-sizer': ''"></mat-header-cell> <!-- [fxFlex]="actions.length * 80 + 'px'" -->
+    <mat-cell *matCellDef="let element" [ngClass]="dynamicColWidth? 'column-data font-sizer': ''"> <!-- [fxFlex]="actions.length * 80 + 'px'" -->
+      <div *ngFor="let action of actions" >
+        <button mat-button [color]="action.color" (click)="action.onClick(element)" [disabled]="action.disabled?action.disabled(element):false">
+          <ng-container *ngIf="!action.iconButton; else iconTpl">
+            <mat-icon *ngIf="action.icon!(element)">{{ action.icon!(element) }}</mat-icon>
+            <mat-spinner *ngIf="action.spinner" [diameter]="40"></mat-spinner>
+            {{ action.label | async }}
+          </ng-container>
+          <ng-template #iconTpl>
+            <!-- <mat-icon>{{ action.icon!(element) }}</mat-icon> -->
+          </ng-template>
+        </button>
+      </div>
+    </mat-cell>
+  </ng-container>
+
+    <ng-container [matColumnDef]="col.name" *ngFor="let col of columns" [sticky]="col.sticky">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="col.sortDisabled" [ngClass]="dynamicColWidth? 'column-data font-sizer': ''" style="font-weight: bold;"> <!--  [fxFlex]="col.flex" -->
+        <span>{{ col.title | async }}</span>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element"  [ngClass]="col.cssClass ? col.cssClass(element) : '' " [ngClass]="dynamicColWidth? 'column-data font-sizer': ''"> <!-- [fxFlex]="col.flex" -->
+        <ng-container [ngSwitch]="col.type">
+          <ng-container *ngSwitchCase="'icon'">
+            <mat-icon
+              [color]="col.color ? col.color(element) : null"
+              [ngClass]="col.cssClass ? col.cssClass(element) : '' "
+
+              matTooltipPosition="above"
+              matTooltipShowDelay="1000"
+              >{{ col.value(element) }}</mat-icon
+            >
+          </ng-container>
+          <ng-container *ngSwitchCase="'link'">
+            <a
+              href="#"
+              [routerLink]="col.routerLink? col.routerLink(element): null"
+
+              matTooltipPosition="above"
+              matTooltipShowDelay="1000"
+              >{{ col.value(element) }}</a
+            >
+          </ng-container>
+          <ng-container *ngSwitchCase="'templateRef'">
+            <ng-container
+              [ngTemplateOutlet]="col.templateRef ? (col.templateRef(element) | async) : null"
+              [ngTemplateOutletContext]="{ col: col, element: element, value: col.value(element) }"
+
+              matTooltipPosition="above"
+              matTooltipShowDelay="1000"
+            ></ng-container>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            <span class=""
+              [matTooltip]="col.value(element)"
+              matTooltipPosition="above"
+              matTooltipShowDelay="1000"
+              >{{ col.value(element) }}</span
+            >
+          </ng-container>
+        </ng-container>
+      </mat-cell>
+    </ng-container>
+
+
+    <div *ngIf="hasHeader">
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    </div>
+    <mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      (click)="selectRow(row)"
+      [class.selected]="selected == row"
+      baaMatRowHover
+      class="row-sizer"
+      (matRowHover)="onMatRowHover($event, row)"
+    ></mat-row>
+  </mat-table>
+  <mat-paginator
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    showFirstLastButtons
+    *ngIf="hasPagination"
+  ></mat-paginator>
+</div>
+

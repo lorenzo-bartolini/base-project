@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "$id":"BaseProjectSchematics",
+    "title": "Title",
+    "type": "object",
+    "description": "asd",
+    "properties": {
+        "modelPath": {
+          "type": "string",
+          "description": "The path to the folder containing the models",
+          "default": "./try",
+          "x-prompt":"Enter path"
+        }
+    },
+    "required": [
+        "modelPath"
+    ]
+}

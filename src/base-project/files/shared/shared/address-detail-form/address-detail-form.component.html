@@ -1,0 +1,56 @@
+<mat-expansion-panel appearance="fill" #accordion class="form-subject">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      {{ 'ADDRESS.DETAIL' | translate }}
+      <mat-icon *ngIf="addressValid === 'red'" class="error">error_outline</mat-icon>
+      <mat-icon *ngIf="addressValid === 'green'" class="green">check_circle_outline</mat-icon>
+      <mat-icon *ngIf="addressValid === 'yellow'" class = "warning">error_outline</mat-icon>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <form [formGroup]="form" >
+    <div class="addr-container">
+      <div class="addr-item-large">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>{{ 'ADDRESS.STREETNAME' | translate }}</mat-label>
+          <input matInput type="text" formControlName="streetName">
+        </mat-form-field>
+      </div>
+      <div class="addr-item-short">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>{{ 'ADDRESS.NUMBER' | translate }}</mat-label>
+          <input matInput type="text" formControlName="streetNumber">
+        </mat-form-field>
+      </div>
+      <div class="addr-item-medium">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>{{ 'ADDRESS.CITY' | translate }}</mat-label>
+          <input matInput type="text" formControlName="city">
+        </mat-form-field>
+      </div>
+      <div class="addr-item-short">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>{{ 'ADDRESS.PROVINCE' | translate }}</mat-label>
+          <input matInput type="text" formControlName="province">
+        </mat-form-field>
+      </div>
+      <!-- <div class="addr-item-medium">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>{{ 'ADDRESS.STATE' | translate }}</mat-label>
+          <input matInput type="text" formControlName="country">
+        </mat-form-field>
+      </div> -->
+      <div class="addr-item-short" >
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>{{ 'ADDRESS.REGION' | translate }}</mat-label>
+          <input matInput type="text" formControlName="state">
+        </mat-form-field>
+      </div>
+      <div class="addr-item-short" >
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>{{ 'ADDRESS.ZIP' | translate }}</mat-label>
+          <input matInput type="text" formControlName="zip">
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-expansion-panel>

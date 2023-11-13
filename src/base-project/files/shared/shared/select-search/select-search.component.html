@@ -1,0 +1,46 @@
+<mat-form-field fxFill [class]="class" [style]="style">
+  <mat-label>{{label}}</mat-label>
+  <mat-select  [(ngModel)]="currentValue" (selectionChange)="selectionChanged($event)" #singleSelect [disabled]="disable!" >
+    <mat-option>
+      <ngx-mat-select-search
+        *ngIf="true"
+        [formControl]="filterControl"
+        [preventHomeEndKeyPropagation]="true"
+        [placeholderLabel]="'LABEL.SEARCH' | translate">
+        <span ngxMatSelectNoEntriesFound>
+          {{noMatchLabel}}
+        </span>
+      </ngx-mat-select-search>
+    </mat-option>
+    <mat-option> - </mat-option>
+    <mat-option *ngFor="let item of filteredItems | async" [value]="item">
+      <div *ngIf="viewField === 'uiLabel' || viewField === 'descx'">
+        {{ 'LABEL.' + item[viewField] | translate }}
+      </div>
+      <div *ngIf="viewField !== '' && viewField !== 'uiLabel' && viewField !== 'descx' && (viewField !== 'code') && viewField !== 'deviceName'">
+        {{item[viewField]}}
+      </div>
+      <div *ngIf="viewField === ''">
+        {{item}}
+      </div>
+      <div *ngIf="viewField === 'deviceName'">
+        {{ 'DISPATCHER.' + item.name | translate }}
+      </div>
+      <div *ngIf="viewField === 'compName'">
+        {{ 'REQUEST.' + item | translate}}
+      </div>
+      <div *ngIf="(viewField === 'code')">
+        <span >
+          {{ item[viewField] }}
+        </span>
+
+      </div>
+      <div *ngIf="(viewField === 'codePratica')">
+        <span >
+          {{ item['code'] + " - " }} <b> {{ 'LABEL.ORDER' | translate }}</b>
+        </span>
+
+      </div>
+    </mat-option>
+  </mat-select>
+</mat-form-field>
