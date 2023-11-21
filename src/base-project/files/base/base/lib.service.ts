@@ -10,9 +10,9 @@ import { tap } from 'rxjs/operators';
 import { catchError, map } from 'rxjs/operators';
 import { plainToClassFromExist } from 'class-transformer';
 import { Moment } from 'moment';
-import * as moment from 'moment';
+import moment from 'moment';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
- import { Log } from '../models/log';
+ //import { Log } from '../models/log';
 // import { AuthService } from '../auth/auth.service';
  import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
@@ -274,7 +274,7 @@ export class LibService {
   }
 
   writeLog(method: string, path: string, request?: any, response?: any) {
-    let action = {
+   /*  let action = {
       method: method,
       path: path,
       params: request,
@@ -285,6 +285,6 @@ export class LibService {
       timestamp: new Date(),
       action: JSON.stringify(action),
       response: response,
-    };
+    }; */
   }
 }

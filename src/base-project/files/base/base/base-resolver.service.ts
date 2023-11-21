@@ -24,7 +24,6 @@ export abstract class BaseResolverService<T> implements Resolve<T> {
     return this.findOne(id).pipe(
       delay(200),
       take(1),
-      tap(() => /* this.overlay.hide() */),
       catchError(err => {
         //this.overlay.hide();
         this.router.navigate(this.routeBack);

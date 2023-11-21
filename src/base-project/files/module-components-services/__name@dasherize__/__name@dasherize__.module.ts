@@ -2,12 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
 
-import {%= classify(name) %>DetailComponent } from './<%= dasherize(name) %>-detail/<%= dasherize(name) %>-detail.component';
-import {%= classify(name) %>ListComponent } from './<%= dasherize(name) %>-list/<%= dasherize(name) %>-list.component';
-import {%= classify(name) %>RoutingModule } from './<%= dasherize(name) %>-routing.module';
-
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {<%= classify(name) %>DetailComponent } from './<%= dasherize(name) %>-detail/<%= dasherize(name) %>-detail.component';
+import {<%= classify(name) %>ListComponent } from './<%= dasherize(name) %>-list/<%= dasherize(name) %>-list.component';
+import {<%= classify(name) %>RoutingModule } from './<%= dasherize(name) %>-routing.module';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -50,10 +49,11 @@ const MATERIAL_MODULES = [
     SharedModule,
     ReactiveFormsModule,
     CommonModule,
+    TranslateModule,
     <%= classify(name) %>RoutingModule
   ],
   exports: [
-    <%= classify(name) %>ListComponent
+    <%= classify(name) %>ListComponent,
     <%= classify(name) %>DetailComponent
   ]
 })

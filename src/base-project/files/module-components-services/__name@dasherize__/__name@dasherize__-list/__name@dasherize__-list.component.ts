@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { <%= classify(name) %>Service } from './<%= dasherize(name) %>.service';
-import { LibService } from 'src/app/base/lib.service';
+import { <%= classify(name) %>Service } from '../<%= dasherize(name) %>.service';
+import { LibService } from '../../base/lib.service';
 
-import { <%= classify(name) %> } from 'src/app/models/<%= dasherize(name) %>';
+import { <%= classify(name) %> } from '../../models/<%= dasherize(name) %>';
 
-import { DatatableAction, DatatableColumn } from 'src/app/shared/data-table/data-table.component';
-
+import { DatatableAction, DatatableColumn } from '../../shared/data-table/data-table.component';
+import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-<%= dasherize(name) %>-list',
   templateUrl: './<%= dasherize(name) %>-list.component.html',

@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { <%= classify(name) %> } from 'src/app/models/<%=dasherize(name) %>';
+import { <%= classify(name) %> } from '../../models/<%=dasherize(name) %>';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { iif, Subscription } from 'rxjs';
-import { <%= classify(name) %>Service } from 'src/app/services/<%= dasherize(name) %>.service';
-import { cleanEmptyProperties } from 'src/app/utils/clean-empty-properties';
+import { <%= classify(name) %>Service } from '../<%= dasherize(name) %>.service';
+import { cleanEmptyProperties } from '../../utils/clean-empty-properties';
 @Component({
   selector: 'app-<%= dasherize(name) %>-detail',
   templateUrl: './<%= dasherize(name) %>-detail.component.html',
@@ -23,6 +23,7 @@ export class <%= classify(name) %>DetailComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private translate: TranslateService,
     private toastr: ToastrService,
     private <%= camelize(name) %>Service: <%= classify(name)%>Service,

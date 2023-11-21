@@ -3,7 +3,6 @@ import { RouterModule, Route } from '@angular/router';
 import { <%= classify(name)%>DetailComponent } from './<%= dasherize(name)%>-detail/<%= dasherize(name)%>-detail.component';
 import { <%= classify(name)%>ListComponent } from './<%= dasherize(name)%>-list/<%= dasherize(name)%>-list.component';
 import { <%= classify(name)%>ResolverService } from './<%= dasherize(name)%>-resolver.service';
-import { <%= classify(name)%>Component } from './<%= dasherize(name)%>.component';
 
 const ROUTES: Route[] = [
     { path: '', component: <%= classify(name)%>ListComponent, pathMatch: 'full' },

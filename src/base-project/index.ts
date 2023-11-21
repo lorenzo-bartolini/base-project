@@ -6,11 +6,20 @@ import { generateFormBuilderTemplate, generateFormTemplate } from './helpers/det
 import { generateColumnsTemplate, generateDisplayedColumnsTemplate } from './helpers/list';
 import { normalize } from 'path';
 import { classify, dasherize } from '@angular-devkit/core/src/utils/strings';
+import { generateNavList } from './helpers/nav';
 export const packages = [
   'ngx-toastr',
-  '@ngx-translate/core'
+  '@ngx-translate/core',
+  '@ngx-translate/http-loader',
+  'ng-block-ui',
+  'class-transformer',
+  'moment',
+  'ngx-mat-select-search',
+  'typeorm',
+  '@types/node'
 ]
-export interface ModuleImport{
+export interface ModuleImport {
+  entityName: string
   name: string
   path: string
 }
@@ -54,21 +63,39 @@ export function baseProject(_options: Schema): Rule {
 
       rules.push(mergeWith(templateRule))
       newModuleImports.push({
-        name: `${classify( model!.name.text)}Module`,
+        entityName: model!.name.text,
+        name: `${classify(model!.name.text)}Module`,
         path: `./${dasherize(model!.name.text)}/${dasherize(model!.name.text)}.module`
       })
     }
+    addRoutesToAppRoutingModule(tree, newModuleImports)
+
     newModuleImports.push({
+      entityName: 'shared',
       name: 'SharedModule',
       path: './shared/shared.module'
     })
-    _context.logger.log('info',`Updating AppModule`)
-    addImportsToAppModule(tree,newModuleImports);
+    _context.logger.log('info', `Updating AppModule`)
+    addImportsToAppModule(tree, newModuleImports);
+
+    updateTsConfig(tree)
+    updateAppComponentHtml(tree)
 
     _context.logger.info(`adding other files and directories`);
+    
     //merging base
     let otherTemplatesSource = url('./files/base')
     let otherTemplatesRule = apply(otherTemplatesSource, [
+      move(normalize(appPath))
+    ])
+    rules.push(mergeWith(otherTemplatesRule))
+    //merging framemodule
+    otherTemplatesSource = url('./files/frame')
+    otherTemplatesRule = apply(otherTemplatesSource, [
+      template({
+        navList: generateNavList(models),
+        ...strings
+      }),
       move(normalize(appPath))
     ])
     rules.push(mergeWith(otherTemplatesRule))
@@ -84,7 +111,19 @@ export function baseProject(_options: Schema): Rule {
       move(normalize(appPath))
     ])
     rules.push(mergeWith(otherTemplatesRule))
-    
+    //merging utils
+    otherTemplatesSource = url('./files/utils')
+    otherTemplatesRule = apply(otherTemplatesSource, [
+      move(normalize(appPath))
+    ])
+    rules.push(mergeWith(otherTemplatesRule))
+    //merging environments
+    otherTemplatesSource = url('./files/environments')
+    otherTemplatesRule = apply(otherTemplatesSource, [
+      move(normalize(appPath))
+    ])
+    rules.push(mergeWith(otherTemplatesRule))
+
     //installing packages
     const installTasks = packages.map(packageName => {
       return (tree: Tree, context: SchematicContext) => {
@@ -148,6 +187,15 @@ function addImportsToAppModule(tree: Tree, newModuleImports: ModuleImport[]) {
       updatedAppModuleContent = importStatement + updatedAppModuleContent;
     }
   });
+  updatedAppModuleContent = `import { TranslateLoader, TranslateModule } from '@ngx-translate/core'; \n
+  import { TranslateHttpLoader } from '@ngx-translate/http-loader';\n
+  import { ToastrModule } from 'ngx-toastr';\n
+  import { HttpClient,HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';\n
+  import { FrameModule } from './frame/frame.module';\n\n
+  
+  export function createTranslateLoader(http: HttpClient) {\n
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');\n
+  }\n` + updatedAppModuleContent
 
   const ngModuleDecoratorString = '@NgModule({';
   const importsArrayStartString = 'imports: [';
@@ -163,7 +211,12 @@ function addImportsToAppModule(tree: Tree, newModuleImports: ModuleImport[]) {
   }
 
   const importsArrayEndIndex = updatedAppModuleContent.indexOf(']', importsArrayStartIndex);
-  const moduleNamesToAdd = newModuleImports.map(module => module.name).join(', ') + ', ';
+  const moduleNamesToAdd = ', \n' + newModuleImports.map(module => module.name).join(', \n')+
+  `,\nTranslateModule.forRoot({loader: {provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient]}}), \n
+  ToastrModule.forRoot({preventDuplicates: true,progressBar: true,countDuplicates: false, extendedTimeOut: 5000, positionClass: 'toast-top-right',}), \n
+  HttpClientModule,\n
+  FrameModule,\n`
+
   updatedAppModuleContent = updatedAppModuleContent.slice(0, importsArrayEndIndex) + moduleNamesToAdd + updatedAppModuleContent.slice(importsArrayEndIndex);
 
   tree.overwrite(appModulePath, updatedAppModuleContent);
@@ -171,3 +224,67 @@ function addImportsToAppModule(tree: Tree, newModuleImports: ModuleImport[]) {
 
 }
 
+function addRoutesToAppRoutingModule(tree: Tree, routesToAdd: ModuleImport[]) {
+  const routingModulePath = 'src/app/app-routing.module.ts'; // Adjust the path if necessary
+  const routingModuleBuffer = tree.read(routingModulePath);
+  if (!routingModuleBuffer) {
+    throw new SchematicsException(`File ${routingModulePath} does not exist.`);
+  }
+  const routingModuleContent = routingModuleBuffer.toString('utf-8');
+
+  let updatedRoutingModuleContent = routingModuleContent;
+
+  // Add route objects
+  routesToAdd.forEach(route => {
+    const routeObject = `{ path: '${dasherize(route.entityName)}', loadChildren: () => import('${route.path}').then(m => m.${route.name}) },\n`;
+    const routesArrayMatch = /const routes: Routes = \[\n?/;
+
+    if (!updatedRoutingModuleContent.includes(routeObject)) {
+      updatedRoutingModuleContent = updatedRoutingModuleContent.replace(routesArrayMatch, match => match + routeObject);
+    }
+  });
+
+  // Write the updated content back to the AppRoutingModule file
+  tree.overwrite(routingModulePath, updatedRoutingModuleContent);
+}
+
+
+function updateTsConfig(tree: Tree) {
+    const tsConfigPath = '/tsconfig.app.json';
+    const buffer = tree.read(tsConfigPath);
+    if (!buffer) {
+      throw new Error(`Could not read ${tsConfigPath}`);
+    }
+
+    const tsConfig = JSON.parse(buffer.toString());
+
+    if (tsConfig.compilerOptions) {
+      if (Array.isArray(tsConfig.compilerOptions.types)) {
+        // Add 'node' only if it's not already in the array
+        if (!tsConfig.compilerOptions.types.includes('node')) {
+          tsConfig.compilerOptions.types.push('node');
+        }
+      } else {
+        tsConfig.compilerOptions.types = ['node'];
+      }
+    } else {
+      tsConfig.compilerOptions = { types: ['node'] };
+    }
+
+    // Update the file with modified tsConfig
+    tree.overwrite(tsConfigPath, JSON.stringify(tsConfig, null, 2));
+}
+
+function updateAppComponentHtml(tree: Tree) {
+    const filePath = '/src/app/app.component.html';
+    const buffer = tree.read(filePath);
+    if (!buffer) {
+      throw new Error(`Could not read ${filePath}`);
+    }
+    let content = buffer.toString('utf-8');
+
+    // Append or replace content based on the 'replace' flag
+    content = `<app-frame><router-outlet></router-outlet></app-frame>`
+
+    tree.overwrite(filePath, content);
+}

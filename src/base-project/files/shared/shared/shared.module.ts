@@ -23,8 +23,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SelectSearchComponent } from './select-search/select-search.component';
 import { AddressDetailFormComponent } from './address-detail-form/address-detail-form.component';
 import { SimpleDialogComponent } from './simple-dialog/simple-dialog.component';
+import { DetailPageComponent } from "./detail-page/detail-page.component";
 import { MatDialogModule } from '@angular/material/dialog';
 import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
+import { MatCardModule } from '@angular/material/card';
+
 
 const SHARED_MODULES = [
   MatTableModule,
@@ -39,6 +42,7 @@ const SHARED_MODULES = [
   MatTooltipModule,
   MatChipsModule,
   MatDialogModule,
+  MatCardModule,
   // MatLegacyChipsModule
   // MAT_CHIP,
   MatAutocompleteModule,
@@ -52,7 +56,8 @@ const SHARED_MODULES = [
     MultiSelectDropdownComponent,
     SelectSearchComponent,
     SimpleDialogComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    DetailPageComponent
   ],
   imports: [
     CommonModule,
@@ -69,7 +74,8 @@ const SHARED_MODULES = [
     DataTableComponent,
     MultiSelectDropdownComponent,
     SelectSearchComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    DetailPageComponent
   ],
   providers: [
   ]

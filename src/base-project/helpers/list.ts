@@ -18,7 +18,7 @@ export function generateColumnsTemplate(interfaceDecl: ts.InterfaceDeclaration){
             },
         `
         }
-    }).join('\n');
+    }).join('\n') + `]`;
 
     return columns
 }
@@ -28,8 +28,8 @@ export function generateDisplayedColumnsTemplate(interfaceDecl: ts.InterfaceDecl
    + interfaceDecl.members.map(member => {
     if (ts.isPropertySignature(member) && member.type) {
         const columnName = member.name.getText();
-        return `'${camelize(columnName)}', `
+        return `'${camelize(columnName)}'`
     }
-   })
+   }).join(', ')
    +`];` 
 }
