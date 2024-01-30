@@ -1,6 +1,6 @@
 {
   "name": "base-project-schematics",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "A schematics to create Angular Modules, Lists and Detail components from a model folder",
   "scripts": {
     "build": "tsc -p tsconfig.json",
