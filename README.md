@@ -27,6 +27,14 @@ npm publish
 
 That's it!
 
+### Usage
+
+Once installed, to run the schematic use following command:
+
+```bash
+ng generate base-project-schematics:base-project
+```
+
 ### DEMO
 
 index.ts is where it all starts

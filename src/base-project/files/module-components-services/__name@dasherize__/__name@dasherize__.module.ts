@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import {<%= classify(name) %>DetailComponent } from './<%= dasherize(name) %>-detail/<%= dasherize(name) %>-detail.component';
 import {<%= classify(name) %>ListComponent } from './<%= dasherize(name) %>-list/<%= dasherize(name) %>-list.component';
 import {<%= classify(name) %>RoutingModule } from './<%= dasherize(name) %>-routing.module';
+import { <%= classify(name) %>ResolverService } from './<%= dasherize(name) %>-resolver.service';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -55,6 +56,9 @@ const MATERIAL_MODULES = [
   exports: [
     <%= classify(name) %>ListComponent,
     <%= classify(name) %>DetailComponent
+  ],
+  providers: [
+    <%= classify(name) %>ResolverService
   ]
 })
 export class <%= classify(name) %>Module { }

@@ -17,6 +17,10 @@ export class <%= classify(name) %>ResolverService extends BaseResolverService<<%
   }
 
   findOne(id: any) {
-    return this.apiService.findOne(id);
+    return this.apiService.findOne({
+      where: {
+        id: id
+      }
+    });
   }
 }
